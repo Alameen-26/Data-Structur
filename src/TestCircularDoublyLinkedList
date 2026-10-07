@@ -1,0 +1,190 @@
+/*
+#########################
+# Course: COMP 2113 FA01, 2026
+# Assignment 3, Question 2a
+# Author: Adedeji Al-ameen Oladunni Adeniyi Olayemi
+# Student ID: 0310392a
+# email address: 0310392a@acadiau.ca
+# Date: 2026-10-07
+# I certify that this code is my own.
+# I have not broken any rules concerning Academic Dishonesty.
+#########################
+*/
+
+/**
+ * Test program for the circular doubly linked list.
+ */
+public class TestCircularDoublyLinkedList {
+
+    public static void main(String[] args) {
+
+        System.out.println("======================================");
+        System.out.println("CIRCULAR DOUBLY LINKED LIST TESTS");
+        System.out.println("======================================");
+
+        CircularDoublyLinkedList list =
+                new CircularDoublyLinkedList();
+
+        // Test 1: Empty list
+
+        System.out.println("\nTest 1: Empty list");
+
+        list.traverseForward();
+        System.out.println("Valid structure: "
+                + list.isValidCircularStructure());
+
+
+        // Test 2: Add first node
+        System.out.println("\nTest 2: Add one node");
+
+        list.add(10, "A");
+
+        list.traverseForward();
+        list.traverseBackward();
+
+        System.out.println("Valid structure: "
+                + list.isValidCircularStructure());
+
+
+        // Test 3: Add nodes to end
+        System.out.println("\nTest 3: Add nodes to end");
+
+        list.add(20, "B");
+        list.add(30, "C");
+        list.add(40, "D");
+
+        list.traverseForward();
+        list.traverseBackward();
+
+        // Test 4: Insert at beginning
+        System.out.println("\nTest 4: Insert at beginning");
+
+        list.add(5, "Start", 0);
+
+        list.traverseForward();
+
+        // Test 5: Insert in middle
+        System.out.println("\nTest 5: Insert in middle");
+
+        list.add(25, "Middle", 3);
+
+        list.traverseForward();
+
+        // Test 6: Insert at end
+        System.out.println("\nTest 6: Insert at end");
+
+        list.add(50, "End", list.size());
+
+        list.traverseForward();
+
+        // Test 7: Forward traversal from middle
+        System.out.println("\nTest 7: Forward traversal from position 2");
+
+        list.traverseForwardFrom(2);
+
+
+        // Test 8: Backward traversal from middle
+        System.out.println("\nTest 8: Backward traversal from position 2");
+
+        list.traverseBackwardFrom(2);
+
+        // Test 9: Remove first node
+        System.out.println("\nTest 9: Remove first node");
+
+        Node removed = list.removeAt(0);
+
+        System.out.println("Removed: " + removed);
+        list.traverseForward();
+
+        // Test 10: Remove middle node
+        System.out.println("\nTest 10: Remove middle node");
+
+        removed = list.removeAt(2);
+
+        System.out.println("Removed: " + removed);
+        list.traverseForward();
+
+        // Test 11: Remove last node
+        System.out.println("\nTest 11: Remove last node");
+
+        removed = list.removeAt(list.size() - 1);
+
+        System.out.println("Removed: " + removed);
+        list.traverseForward();
+
+        // Test 12: Remove by value
+        System.out.println("\nTest 12: Remove by value");
+
+        removed = list.removeValue(20);
+
+        System.out.println("Removed: " + removed);
+        list.traverseForward();
+
+        // Test 13: Remove missing value
+        System.out.println("\nTest 13: Remove missing value");
+
+        removed = list.removeValue(999);
+
+        if (removed == null) {
+            System.out.println("Value 999 was not found.");
+        }
+
+        // Test 14: Check circular structure
+        System.out.println("\nTest 14: Check circular structure");
+
+        System.out.println(
+                "Valid structure: "
+                        + list.isValidCircularStructure()
+        );
+
+        // Test 15: Invalid insertion
+        System.out.println("\nTest 15: Invalid insertion");
+
+        try {
+            list.add(100, "Invalid", 999);
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println(
+                    "Correctly caught: " + e.getMessage()
+            );
+        }
+
+        // Test 16: Invalid removal
+        System.out.println("\nTest 16: Invalid removal");
+
+        try {
+            list.removeAt(999);
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println(
+                    "Correctly caught: " + e.getMessage()
+            );
+        }
+
+        // Test 17: Final forward traversal
+        System.out.println("\nTest 17: Final forward traversal");
+
+        list.traverseForward();
+
+        // Test 18: Final backward traversal
+        System.out.println("\nTest 18: Final backward traversal");
+
+        list.traverseBackward();
+
+        // Final verification
+        System.out.println("\n======================================");
+        System.out.println("FINAL VERIFICATION");
+        System.out.println("======================================");
+
+        System.out.println("List: " + list);
+        System.out.println("Size: " + list.size());
+        System.out.println(
+                "Circular structure valid: "
+                        + list.isValidCircularStructure()
+        );
+
+        System.out.println("\n======================================");
+        System.out.println("ALL TESTS COMPLETE");
+        System.out.println("======================================");
+    }
+}

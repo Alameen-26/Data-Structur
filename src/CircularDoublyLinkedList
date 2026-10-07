@@ -1,0 +1,350 @@
+/*
+#########################
+# Course: COMP 2113 FA01, 2026
+# Assignment 3, Question 2a
+# Author: Adedeji Al-ameen Oladunni Adeniyi Olayemi
+# Student ID: 0310392a
+# email address: 0310392a@acadiau.ca
+# Date: 2026-10-07
+# I certify that this code is my own.
+# I have not broken any rules concerning Academic Dishonesty.
+#########################
+*/
+public class CircularDoublyLinkedList {
+
+    private Node head;
+    private Node tail;
+    private int size;
+
+    public CircularDoublyLinkedList() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    /**
+      Returns the number of nodes.
+     */
+    public int size() {
+        return size;
+    }
+
+    public void add(int value, String label) {
+        add(value, label, size);
+    }
+
+    /**
+      Adds a node at a specified position.
+     */
+    public void add(int value, String label, int position) {
+
+        if (position < 0 || position > size) {
+            throw new IndexOutOfBoundsException(
+                "Invalid insertion position: " + position
+            );
+        }
+
+        Node newNode = new Node(value, label);
+
+
+        if (size == 0) {
+
+            head = newNode;
+            tail = newNode;
+
+
+            newNode.next = newNode;
+            newNode.previous = newNode;
+        }
+
+
+        else if (position == 0) {
+
+            newNode.next = head;
+            newNode.previous = tail;
+
+            tail.next = newNode;
+            head.previous = newNode;
+
+            head = newNode;
+        }
+
+
+        else if (position == size) {
+
+            newNode.next = head;
+            newNode.previous = tail;
+
+            tail.next = newNode;
+            head.previous = newNode;
+
+            tail = newNode;
+        }
+
+
+        else {
+
+            Node current = nodeAt(position);
+            Node previous = current.previous;
+
+            newNode.next = current;
+            newNode.previous = previous;
+
+            previous.next = newNode;
+            current.previous = newNode;
+        }
+
+        size++;
+    }
+
+    /**
+      Returns the node at the specified position.
+     */
+    private Node nodeAt(int position) {
+
+        if (position < 0 || position >= size) {
+            throw new IndexOutOfBoundsException(
+                "Invalid node position: " + position
+            );
+        }
+
+        Node current = head;
+
+        for (int i = 0; i < position; i++) {
+            current = current.next;
+        }
+
+        return current;
+    }
+
+    /**
+     Removes a node at the specified position.
+     */
+    public Node removeAt(int position) {
+
+        if (position < 0 || position >= size) {
+            throw new IndexOutOfBoundsException(
+                "Invalid removal position: " + position
+            );
+        }
+
+        Node removed = nodeAt(position);
+
+
+        if (size == 1) {
+
+            head = null;
+            tail = null;
+        }
+
+        else {
+
+
+            removed.previous.next = removed.next;
+            removed.next.previous = removed.previous;
+
+
+            if (removed == head) {
+                head = removed.next;
+            }
+
+
+            if (removed == tail) {
+                tail = removed.previous;
+            }
+        }
+
+        size--;
+
+
+        removed.next = null;
+        removed.previous = null;
+
+        return removed;
+    }
+
+    /**
+      Removes the first node containing the specified value.
+     */
+    public Node removeValue(int value) {
+
+        if (size == 0) {
+            return null;
+        }
+
+        Node current = head;
+
+        for (int i = 0; i < size; i++) {
+
+            if (current.value == value) {
+
+
+                if (size == 1) {
+
+                    head = null;
+                    tail = null;
+                }
+
+                else {
+
+                    current.previous.next = current.next;
+                    current.next.previous = current.previous;
+
+                    if (current == head) {
+                        head = current.next;
+                    }
+
+                    if (current == tail) {
+                        tail = current.previous;
+                    }
+                }
+
+                size--;
+
+                current.next = null;
+                current.previous = null;
+
+                return current;
+            }
+
+            current = current.next;
+        }
+
+        return null;
+    }
+
+    /**
+      Traverses forward starting from a specified position.
+     */
+    public void traverseForwardFrom(int position) {
+
+        if (size == 0) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        Node current = nodeAt(position);
+
+        for (int i = 0; i < size; i++) {
+
+            System.out.print(current + " -> ");
+
+            current = current.next;
+        }
+
+        System.out.println("(back to start)");
+    }
+
+    /**
+      Traverses backward starting from a specified position.
+     */
+    public void traverseBackwardFrom(int position) {
+
+        if (size == 0) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        Node current = nodeAt(position);
+
+        for (int i = 0; i < size; i++) {
+
+            System.out.print(current + " -> ");
+
+            current = current.previous;
+        }
+
+        System.out.println("(back to start)");
+    }
+
+    /**
+      Traverses forward from the head.
+     */
+    public void traverseForward() {
+        traverseForwardFrom(0);
+    }
+
+    /**
+     Traverses backward from the tail.
+     */
+    public void traverseBackward() {
+
+        if (size == 0) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        traverseBackwardFrom(size - 1);
+    }
+
+    /**
+     Checks whether the circular doubly linked list
+     */
+    public boolean isValidCircularStructure() {
+
+        if (size == 0) {
+            return head == null && tail == null;
+        }
+
+        if (head == null || tail == null) {
+            return false;
+        }
+
+
+        if (head.previous != tail) {
+            return false;
+        }
+
+        if (tail.next != head) {
+            return false;
+        }
+
+
+        Node current = head;
+
+        for (int i = 0; i < size; i++) {
+
+            if (current.next.previous != current) {
+                return false;
+            }
+
+            if (current.previous.next != current) {
+                return false;
+            }
+
+            current = current.next;
+        }
+
+
+        return current == head;
+    }
+
+    /**
+      Returns a forward string representation.
+     */
+    @Override
+    public String toString() {
+
+        if (size == 0) {
+            return "[]";
+        }
+
+        StringBuilder result = new StringBuilder("[");
+        Node current = head;
+
+        for (int i = 0; i < size; i++) {
+
+            result.append(current);
+
+            if (i < size - 1) {
+                result.append(", ");
+            }
+
+            current = current.next;
+        }
+
+        result.append("]");
+
+        return result.toString();
+    }
+}
